@@ -1,9 +1,9 @@
 import { GetServerSideProps } from "next";
 import Link from "next/link";
-import React from "react";
 import prisma from "../../lib/prisma";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  // @ts-ignore
   const id = parseInt(context.params.id);
   let post = await prisma.post.findUnique({
     where: {
@@ -17,7 +17,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const Post: React.FC<PostProps> = (props) => {
+const Post = (props) => {
   const { post } = props;
 
   return (
