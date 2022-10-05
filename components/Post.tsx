@@ -1,31 +1,47 @@
-import React from "react";
-import Router from "next/router";
-import ReactMarkdown from "react-markdown";
+import Link from "next/link";
+import { Post } from "prisma";
 
-export type PostProps = {
-  id: string;
-  title: string;
-  author: {
-    name: string;
-    email: string;
-  } | null;
-  content: string;
-  published: boolean;
-};
-
-const Post: React.FC<{ post: PostProps }> = ({ post }) => {
-  const authorName = post.author ? post.author.name : "Unknown author";
+const Post = ({ post }: { post: Post }) => {
   return (
-    <div onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}>
-      <h2>{post.title}</h2>
-      <small>By {authorName}</small>
-      <ReactMarkdown children={post.content} />
-      <style jsx>{`
-        div {
-          color: inherit;
-          padding: 2rem;
-        }
-      `}</style>
+    <div className={`flex flex-col gap-3`}>
+      <div>
+        <span className="capitalize">{post.feed_type}</span> ↓{" "}
+        <Link href={`/p/${post.id}`}>
+          <a className="underline">
+            {new Date(post.date).toLocaleDateString(undefined, {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </a>
+        </Link>
+      </div>
+      <div>
+        <img
+          style={{
+            boxShadow: "0 0 0 1px rgba(0,0,0,0.125)",
+          }}
+          src={post.image}
+        />
+      </div>
+      <div className="flex flex-col gap-1 pl-4">
+        <div>{post.text}</div>
+        {post.from || post.via ? (
+          <div>
+            {post.from && (
+              <>
+                from{" "}
+                <Link href={post.from}>
+                  <a target="_blank" className="underline">
+                    {post.from}
+                  </a>
+                </Link>{" "}
+              </>
+            )}
+            {post.via && <>via {post.via}</>}
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 };

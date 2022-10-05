@@ -1,61 +1,67 @@
-import React from "react"
-import { GetServerSideProps } from "next"
-import ReactMarkdown from "react-markdown"
-import Layout from "../../components/Layout"
-import { PostProps } from "../../components/Post"
+import { GetServerSideProps } from "next";
+import Link from "next/link";
+import React from "react";
+import prisma from "../../lib/prisma";
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const post = {
-    id: "1",
-    title: "Prisma is the perfect ORM for Next.js",
-    content: "[Prisma](https://github.com/prisma/prisma) and Next.js go _great_ together!",
-    published: false,
-    author: {
-      name: "Nikolas Burk",
-      email: "burk@prisma.io",
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const id = parseInt(context.params.id);
+  let post = await prisma.post.findUnique({
+    where: {
+      id,
     },
-  }
+  });
+  // To serialize date object, could do better
+  post = JSON.parse(JSON.stringify(post));
   return {
-    props: post,
-  }
-}
+    props: { post },
+  };
+};
 
 const Post: React.FC<PostProps> = (props) => {
-  let title = props.title
-  if (!props.published) {
-    title = `${title} (Draft)`
-  }
+  const { post } = props;
 
   return (
-    <Layout>
+    <div className={`flex flex-col gap-3`}>
       <div>
-        <h2>{title}</h2>
-        <p>By {props?.author?.name || "Unknown author"}</p>
-        <ReactMarkdown children={props.content} />
+        <span className="capitalize">{post.feed_type}</span> ↓{" "}
+        <Link href={`/p/${post.id}`}>
+          <a className="underline">
+            {new Date(post.date).toLocaleDateString(undefined, {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </a>
+        </Link>
       </div>
-      <style jsx>{`
-        .page {
-          background: white;
-          padding: 2rem;
-        }
+      <div>
+        <img
+          style={{
+            boxShadow: "0 0 0 1px rgba(0,0,0,0.125)",
+          }}
+          src={post.image}
+        />
+      </div>
+      <div className="flex flex-col gap-1 pl-4">
+        <div>{post.text}</div>
+        {post.from || post.via ? (
+          <div>
+            {post.from && (
+              <>
+                from{" "}
+                <Link href={post.from}>
+                  <a target="_blank" className="underline">
+                    {post.from}
+                  </a>
+                </Link>{" "}
+              </>
+            )}
+            {post.via && <>via {post.via}</>}
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+};
 
-        .actions {
-          margin-top: 2rem;
-        }
-
-        button {
-          background: #ececec;
-          border: 0;
-          border-radius: 0.125rem;
-          padding: 1rem 2rem;
-        }
-
-        button + button {
-          margin-left: 1rem;
-        }
-      `}</style>
-    </Layout>
-  )
-}
-
-export default Post
+export default Post;
