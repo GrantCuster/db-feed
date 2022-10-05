@@ -27,6 +27,7 @@ function Admin() {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
+                // @ts-ignore
                 password: e.target.elements.password.value,
               }),
             });
@@ -36,6 +37,7 @@ function Admin() {
               return;
             }
 
+            // @ts-ignore
             const imageFile = e.target.elements.image.files[0];
             const { url } = await uploadToS3(imageFile);
             // const url = "test";
@@ -44,14 +46,20 @@ function Admin() {
             body.append("file", imageFile);
 
             let newPost = {
+              // @ts-ignore
               feed_type: e.target.elements.type.value,
               image: url,
+              // @ts-ignore
               text: e.target.elements.text.value,
             };
+            // @ts-ignore
             if (e.target.elements.from.value.length > 0) {
+              // @ts-ignore
               newPost.from = e.target.elements.from.value;
             }
+            // @ts-ignore
             if (e.target.elements.via.value.length > 0) {
+              // @ts-ignore
               newPost.via = e.target.elements.via.value;
             }
 
@@ -64,6 +72,7 @@ function Admin() {
 
             body.append("postId", createdPost.id.toString());
 
+            // @ts-ignore
             if (e.target.elements.tweet.checked) {
               await fetch("/api/tweet", {
                 method: "POST",
@@ -114,7 +123,7 @@ function Admin() {
             <input
               type="submit"
               value="Post"
-              className="bg-blue-200 px-4 rounded-md py-2 cursor-pointer hover:bg-blue-300"
+              className="px-4 py-2 bg-blue-200 rounded-md cursor-pointer hover:bg-blue-300"
             />
           </div>
         </form>

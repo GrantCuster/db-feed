@@ -1,6 +1,5 @@
 import { GetStaticProps } from "next";
-import React from "react";
-import Post, { PostProps } from "../components/Post";
+import Post from "../components/Post";
 import prisma from "../lib/prisma";
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -17,11 +16,7 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-type Props = {
-  feed: PostProps[];
-};
-
-const Blog: React.FC<Props> = (props) => {
+const Blog = (props) => {
   return (
     <div className="max-w-[640px] mx-auto pt-4">
       <div>Grant Custer</div>
