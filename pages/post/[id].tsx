@@ -7,6 +7,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const id = context.params.id as string;
   let post = await prisma.post.findFirst({
     where: {
+      // @ts-ignore
       slug: id,
     },
   }); // To serialize date object, could do better
