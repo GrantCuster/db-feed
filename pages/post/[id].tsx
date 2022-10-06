@@ -1,5 +1,6 @@
 import { GetServerSideProps } from "next";
 import Link from "next/link";
+import { useState } from "react";
 import prisma from "../../lib/prisma";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -40,6 +41,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const Post = (props) => {
   const { post, prevSlug, nextSlug } = props;
+  const [imageFullSize, setImageFullSize] = useState(false);
 
   return (
     <>
@@ -62,7 +64,7 @@ const Post = (props) => {
         </div>
       </div>
 
-      <div className="py-4 border-b-2 border-zinc-200">
+      <div className="px-4 py-4 border-b-2 border-zinc-200 dark:border-zinc-700 md:px-0">
         <div className="flex max-w-[620px] mx-auto justify-between">
           <Link href="/">
             <a className="underline">Feed</a>
@@ -82,7 +84,7 @@ const Post = (props) => {
         </div>
       </div>
 
-      <div className="max-w-[620px] mx-auto py-4 pt-6">
+      <div className="max-w-[620px] mx-auto py-4 pt-6 px-4 md:px-0">
         <span className="capitalize">{post.feed_type}</span> ↓{" "}
         {new Date(post.date).toLocaleDateString(undefined, {
           month: "long",
@@ -90,16 +92,19 @@ const Post = (props) => {
           year: "numeric",
         })}
       </div>
-      <div>
+      <div className="w-full overflow-x-auto">
         <img
           className="mx-auto"
           style={{
+            cursor: imageFullSize ? "zoom-out" : "zoom-in",
             boxShadow: "0 0 0 1px rgba(0,0,0,0.125)",
+            maxWidth: imageFullSize ? "none" : "100%",
           }}
           src={post.image}
+          onClick={() => setImageFullSize(!imageFullSize)}
         />
       </div>
-      <div className="max-w-[640px] mx-auto py-4 pb-6">
+      <div className="max-w-[640px] mx-auto py-4 px-4 md:px-0 pb-6">
         <div className="flex flex-col gap-1">
           <div>{post.text}</div>
           {post.from || post.via ? (
@@ -119,7 +124,7 @@ const Post = (props) => {
           ) : null}
         </div>
       </div>
-      <div className="mb-8 border-b-2 border-zinc-200"></div>
+      <div className="mb-8 border-b-2 border-zinc-200 dark:border-zinc-700"></div>
     </>
   );
 };

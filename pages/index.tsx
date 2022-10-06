@@ -83,11 +83,9 @@ const Blog = (props) => {
         </div>
 
         {isLoading ? (
-          <div className="px-4 py-4 text-center border-2 md:px-7 border-zinc-200">
-            Loading...
-          </div>
+          <div className="px-4 py-4 text-center">Loading...</div>
         ) : (
-          <main className="flex flex-col border-t-2 border-zinc-200">
+          <main className="flex flex-col border-t-2 border-zinc-200 dark:border-zinc-700">
             {data.pages.map((page, i) => (
               <div key={i} className="flex flex-col">
                 {page.posts.map((post) => {
