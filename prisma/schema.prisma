@@ -12,6 +12,7 @@ datasource db {
 
 model Post {
  id   Int    @id @default(autoincrement())
+ slug      String
  date      DateTime   @default(now())
  feed_type String
  image     String

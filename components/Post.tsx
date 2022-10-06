@@ -6,7 +6,7 @@ const Post = ({ post }: { post: Post }) => {
     <div className={`flex flex-col gap-3`}>
       <div>
         <span className="capitalize">{post.feed_type}</span> ↓{" "}
-        <Link href={`/p/${post.id}`}>
+        <Link href={`/post/${post.slug}`}>
           <a className="underline">
             {new Date(post.date).toLocaleDateString(undefined, {
               month: "short",

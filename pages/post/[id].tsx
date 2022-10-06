@@ -4,13 +4,12 @@ import prisma from "../../lib/prisma";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // @ts-ignore
-  const id = parseInt(context.params.id);
-  let post = await prisma.post.findUnique({
+  const id = context.params.id as string;
+  let post = await prisma.post.findFirst({
     where: {
-      id,
+      slug: id,
     },
-  });
-  // To serialize date object, could do better
+  }); // To serialize date object, could do better
   post = JSON.parse(JSON.stringify(post));
   return {
     props: { post },
@@ -23,16 +22,17 @@ const Post = (props) => {
   return (
     <div className={`flex flex-col gap-3`}>
       <div>
-        <span className="capitalize">{post.feed_type}</span> ↓{" "}
-        <Link href={`/p/${post.id}`}>
-          <a className="underline">
-            {new Date(post.date).toLocaleDateString(undefined, {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </a>
+        <Link href="/">
+          <a className="underline">Feed</a>
         </Link>
+      </div>
+      <div>
+        <span className="capitalize">{post.feed_type}</span> ↓{" "}
+        {new Date(post.date).toLocaleDateString(undefined, {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        })}
       </div>
       <div>
         <img

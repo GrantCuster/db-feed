@@ -51,6 +51,7 @@ function Admin() {
               image: url,
               // @ts-ignore
               text: e.target.elements.text.value,
+              slug: Math.round(new Date().getTime() / 1000).toString(),
             };
             // @ts-ignore
             if (e.target.elements.from.value.length > 0) {
