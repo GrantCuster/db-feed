@@ -43,7 +43,7 @@ const Post = (props) => {
 
   return (
     <>
-      <div className="py-4">
+      <div className="pt-4">
         <div className="flex max-w-[620px] mx-auto justify-between px-4 md:px-0">
           <div>Grant Custer</div>
           <div className="flex gap-3">
@@ -62,7 +62,7 @@ const Post = (props) => {
         </div>
       </div>
 
-      <div className="py-4 mb-2 border-t-2 border-b-2 border-zinc-200">
+      <div className="py-4 border-b-2 border-zinc-200">
         <div className="flex max-w-[620px] mx-auto justify-between">
           <Link href="/">
             <a className="underline">Feed</a>
@@ -82,7 +82,7 @@ const Post = (props) => {
         </div>
       </div>
 
-      <div className="max-w-[620px] mx-auto py-4">
+      <div className="max-w-[620px] mx-auto py-4 pt-6">
         <span className="capitalize">{post.feed_type}</span> ↓{" "}
         {new Date(post.date).toLocaleDateString(undefined, {
           month: "long",
@@ -99,7 +99,7 @@ const Post = (props) => {
           src={post.image}
         />
       </div>
-      <div className="max-w-[640px] mx-auto py-4">
+      <div className="max-w-[640px] mx-auto py-4 pb-6">
         <div className="flex flex-col gap-1">
           <div>{post.text}</div>
           {post.from || post.via ? (
@@ -119,6 +119,7 @@ const Post = (props) => {
           ) : null}
         </div>
       </div>
+      <div className="mb-8 border-b-2 border-zinc-200"></div>
     </>
   );
 };

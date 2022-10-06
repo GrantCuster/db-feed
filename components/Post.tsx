@@ -4,7 +4,7 @@ import { Post } from "prisma";
 const Post = ({ post }: { post: Post }) => {
   return (
     <div
-      className={`flex flex-col gap-4 px-4 md:px-7 py-5 md:py-6 border-2 border-zinc-200 border-b-0`}
+      className={`flex flex-col gap-4 px-4 md:px-7 py-5 md:py-6 border-2 border-zinc-200 border-t-0`}
     >
       <div>
         <span className="capitalize">{post.feed_type}</span> ↓{" "}

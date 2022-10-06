@@ -58,10 +58,7 @@ const Blog = (props) => {
 
   return (
     <>
-      <div className="hidden px-2 py-3 mb-4 text-center text-black bg-yellow-200">
-        Under construction
-      </div>
-      <div className="max-w-[620px] mx-auto pt-4 md:pt-6">
+      <div className="max-w-[620px] mx-auto pt-4 md:pt-4">
         {/* header */}
         <div className="flex justify-between px-4 md:px-0">
           <div>Grant Custer</div>
@@ -80,9 +77,7 @@ const Blog = (props) => {
           </div>
         </div>
 
-        <div
-          className={`flex justify-between px-4 md:px-7 py-4 border-2 border-b-0 border-zinc-200  mt-4 md:mt-6`}
-        >
+        <div className={`flex justify-between px-4 md:px-0 py-4`}>
           <div className="">Feed</div>
           <div className="text-zinc-500">work and inspiration in progress</div>
         </div>
@@ -92,35 +87,14 @@ const Blog = (props) => {
             Loading...
           </div>
         ) : (
-          <main className="flex flex-col ">
+          <main className="flex flex-col border-t-2 border-zinc-200">
             {data.pages.map((page, i) => (
               <div key={i} className="flex flex-col">
                 {page.posts.map((post) => {
-                  let displayMonth = false;
-                  const month = new Date(post.date).toLocaleDateString(
-                    undefined,
-                    {
-                      month: "long",
-                      year: "numeric",
-                    }
-                  );
-                  if (month !== lastMonthRef.current) {
-                    displayMonth = true;
-                    lastMonthRef.current = month;
-                  }
                   return (
-                    <>
-                      {displayMonth && (
-                        <div
-                          className={`px-4 md:px-7 uppercase text-sm tracking-wider py-4 border-2 border-zinc-200 border-b-0 `}
-                        >
-                          <div>{month}</div>
-                        </div>
-                      )}
-                      <div key={post.id} className="">
-                        <Post post={post} />
-                      </div>
-                    </>
+                    <div key={post.id} className="">
+                      <Post post={post} />
+                    </div>
                   );
                 })}
               </div>
