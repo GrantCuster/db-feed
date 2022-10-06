@@ -19,7 +19,7 @@ function Admin() {
           onSubmit={async (e) => {
             e.preventDefault();
 
-            // setSubmitting(true);
+            setSubmitting(true);
 
             const passwordCheck = await fetch("/api/checkPassword", {
               method: "POST",
@@ -45,13 +45,14 @@ function Admin() {
             const body = new FormData();
             body.append("file", imageFile);
 
+            const slug = Math.round(new Date().getTime() / 1000).toString();
             let newPost = {
               // @ts-ignore
               feed_type: e.target.elements.type.value,
               image: url,
               // @ts-ignore
               text: e.target.elements.text.value,
-              slug: Math.round(new Date().getTime() / 1000).toString(),
+              slug: slug,
             };
             // @ts-ignore
             if (e.target.elements.from.value.length > 0) {
@@ -71,7 +72,7 @@ function Admin() {
               body,
             }).then((res) => res.json());
 
-            body.append("postId", createdPost.id.toString());
+            body.append("slug", slug);
 
             // @ts-ignore
             if (e.target.elements.tweet.checked) {

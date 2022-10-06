@@ -9,5 +9,5 @@ html {
 textarea,
 input[type="text"],
 input[type="password"] {
-  @apply border-2 border-gray-400 w-full;
+  @apply w-full text-black border-2 border-gray-400;
 }

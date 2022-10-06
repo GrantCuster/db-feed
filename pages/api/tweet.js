@@ -22,7 +22,6 @@ export default async (req, res) => {
   };
   const form = new formidable.IncomingForm();
   form.parse(req, async function (err, fields, files) {
-    const postId = fields.postId;
     const file = files.file;
     const newPost = JSON.parse(fields.newPost);
 
@@ -42,7 +41,7 @@ export default async (req, res) => {
 
     let statusText = capitalize(newPost.feed_type);
     statusText += ` ↓ `;
-    statusText += `https://feed.grantcuster.com/p/${postId}`;
+    statusText += `https://feed.grantcuster.com/post/${fields.slug}`;
     if (newPost.text) {
       statusText += "\n";
       statusText += `${newPost.text.substring(0, charLimit)}`;
@@ -60,11 +59,6 @@ export default async (req, res) => {
       }
     }
 
-    // ↓
-    // ${newPost.text}${newPost.from || newPost.via ? `
-    // ${newPost.from ? `from ${newPost.from}}` : ""}`;
-    console.log(statusText);
-    return;
     const data = fs.readFileSync(files.file.filepath);
     client.post(
       "media/upload",
