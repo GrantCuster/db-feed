@@ -1,32 +1,50 @@
 import { GetServerSideProps } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import prisma from "../../lib/prisma";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // @ts-ignore
   const id = context.params.id as string;
+
   let post = await prisma.post.findFirst({
     where: {
       // @ts-ignore
       slug: id,
     },
-  }); // To serialize date object, could do better
+  });
+
+  const prev = await prisma.post.findMany({
+    skip: 1,
+    cursor: { id: post.id },
+    take: -1,
+    orderBy: { id: "desc" },
+  });
+  const next = await prisma.post.findMany({
+    skip: 1,
+    cursor: { id: post.id },
+    take: 1,
+    orderBy: { id: "desc" },
+  });
+
+  // To serialize date object, could do better
   post = JSON.parse(JSON.stringify(post));
+
   return {
-    props: { post },
+    props: {
+      post,
+      prevSlug: prev[0] ? prev[0].slug : null,
+      nextSlug: next[0] ? next[0].slug : null,
+    },
   };
 };
 
 const Post = (props) => {
-  const { post } = props;
-  const router = useRouter();
+  const { post, prevSlug, nextSlug } = props;
 
   return (
     <>
-      <div className="max-w-[620px] mx-auto pt-6 pb-4">
-        {/* header */}
-        <div className="flex justify-between px-4 md:px-0">
+      <div className="py-4">
+        <div className="flex max-w-[620px] mx-auto justify-between px-4 md:px-0">
           <div>Grant Custer</div>
           <div className="flex gap-3">
             <div>Feed</div>
@@ -42,24 +60,35 @@ const Post = (props) => {
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="flex justify-between pt-3 mb-4">
+      <div className="py-4 mb-2 border-t-2 border-b-2 border-zinc-200">
+        <div className="flex max-w-[620px] mx-auto justify-between">
           <Link href="/">
             <a className="underline">Feed</a>
           </Link>
-          <div className="flex">
-            <div>prev</div>
-            <div>next</div>
+          <div className="flex gap-3">
+            {prevSlug && (
+              <Link href={`/post/${prevSlug}`}>
+                <a className="underline">Previous</a>
+              </Link>
+            )}
+            {nextSlug && (
+              <Link href={`/post/${nextSlug}`}>
+                <a className="underline">Next</a>
+              </Link>
+            )}
           </div>
         </div>
-        <div>
-          <span className="capitalize">{post.feed_type}</span> ↓{" "}
-          {new Date(post.date).toLocaleDateString(undefined, {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-          })}
-        </div>
+      </div>
+
+      <div className="max-w-[620px] mx-auto py-4">
+        <span className="capitalize">{post.feed_type}</span> ↓{" "}
+        {new Date(post.date).toLocaleDateString(undefined, {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        })}
       </div>
       <div>
         <img
@@ -70,8 +99,8 @@ const Post = (props) => {
           src={post.image}
         />
       </div>
-      <div className="max-w-[640px] mx-auto pt-4 pb-12">
-        <div className="flex flex-col gap-1 pl-4">
+      <div className="max-w-[640px] mx-auto py-4">
+        <div className="flex flex-col gap-1">
           <div>{post.text}</div>
           {post.from || post.via ? (
             <div>
