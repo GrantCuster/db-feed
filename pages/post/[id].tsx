@@ -27,6 +27,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     take: 1,
     orderBy: { id: "desc" },
   });
+  const post_count = await prisma.post.count();
+  const random = await prisma.post.findMany({
+    skip: Math.floor(Math.random() * post_count),
+    take: 1,
+  });
 
   // To serialize date object, could do better
   post = JSON.parse(JSON.stringify(post));
@@ -36,12 +41,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       post,
       prevSlug: prev[0] ? prev[0].slug : null,
       nextSlug: next[0] ? next[0].slug : null,
+      randomSlug: random[0] ? random[0].slug : null,
     },
   };
 };
 
 const Post = (props) => {
-  const { post, prevSlug, nextSlug } = props;
+  const { post, prevSlug, nextSlug, randomSlug } = props;
   const [imageFullSize, setImageFullSize] = useState(false);
   const router = useRouter();
   const id = router.query.id as string;
@@ -73,6 +79,11 @@ const Post = (props) => {
             <a className="underline">Feed</a>
           </Link>
           <div className="flex gap-3">
+            {randomSlug && (
+              <Link href={`/post/${randomSlug}`}>
+                <a className="underline">Random</a>
+              </Link>
+            )}
             {prevSlug && (
               <Link href={`/post/${prevSlug}`}>
                 <a className="underline">Previous</a>
