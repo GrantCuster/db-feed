@@ -11,3 +11,7 @@ input[type="text"],
 input[type="password"] {
   @apply w-full text-black border-2 border-gray-400;
 }
+
+a {
+  word-wrap: break-word;
+}

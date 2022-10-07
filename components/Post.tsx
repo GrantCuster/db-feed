@@ -44,7 +44,14 @@ const Post = ({ post }: { post: Post }) => {
                 </Link>{" "}
               </>
             )}
-            {post.via && <>via {post.via}</>}
+            {post.via && (
+              <>
+                via{" "}
+                <Link href={post.via}>
+                  <a className="underline">{post.via}</a>
+                </Link>
+              </>
+            )}
           </div>
         ) : null}
       </div>
