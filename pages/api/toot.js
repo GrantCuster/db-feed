@@ -57,10 +57,8 @@ export default async (req, res) => {
       }
     }
 
-    const data = fs.readFileSync(files.file.filepath);
-
     const attachment = await masto.v2.mediaAttachments.create({
-      file: new Blob([data]),
+      file: fs.readFileSync(files.file.filepath),
     });
 
     await masto.v1.statuses.create({
@@ -68,7 +66,7 @@ export default async (req, res) => {
       visibility: "public",
       mediaIds: [attachment.id],
     });
-     
+
     console.log("tooted");
     res.status(200).json({ status: "tooted" });
     console.log(statusText);
