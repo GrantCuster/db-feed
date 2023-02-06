@@ -76,11 +76,20 @@ function Admin() {
 
             // @ts-ignore
             if (e.target.elements.tweet.checked) {
-              await fetch("/api/tweet", {
+              fetch("/api/tweet", {
                 method: "POST",
                 body,
               });
             }
+
+            // @ts-ignore
+            if (e.target.elements.toot.checked) {
+              fetch("/api/toot", {
+                method: "POST",
+                body,
+              });
+            }
+ 
           }}
         >
           <div>Password</div>
@@ -119,6 +128,11 @@ function Admin() {
           <div>
             <label>
               <input type="checkbox" name="tweet" defaultChecked /> Tweet
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="toot" defaultChecked /> Toot
             </label>
           </div>
           <div>
